@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { randomUUID } from 'crypto';
 import { decrypt } from '@/lib/security/decrypt';
 
-export const login = async (formData: FormData) => {
+export const login = async (_prevState: any, formData: FormData) => {
   const username = formData.get('username');
   const password = formData.get('password');
 
@@ -15,16 +15,26 @@ export const login = async (formData: FormData) => {
     .eq('username', username);
 
   if (error) {
-    throw new Error(error.message);
+    console.error(error.message);
+
+    return {
+      message: 'Something went wrong!',
+      success: false,
+    };
   }
 
   const decryptedPasswordFromDB = decrypt(data[0].password);
 
   if (decryptedPasswordFromDB.message === password) {
     cookies().set('token', randomUUID());
-    console.log('Login successful!');
-    return;
+
+    return {
+      message: 'Login successful!',
+      success: true,
+    };
   }
-  console.log('Passwords do not match!');
-  // TODO: Add toast message
+  return {
+    message: 'Login failed, check your credentials.',
+    success: false,
+  };
 };

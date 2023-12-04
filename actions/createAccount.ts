@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 import { randomUUID } from 'crypto';
 import { encrypt } from '@/lib/security/encrypt';
 
-export const createAccount = async (formData: FormData) => {
+export const createAccount = async (_prevState: any, formData: FormData) => {
   const username = formData.get('username');
   const password = formData.get('password');
 
@@ -16,8 +16,18 @@ export const createAccount = async (formData: FormData) => {
   });
 
   if (error) {
-    throw new Error(error.message);
+    console.error(error.message);
+
+    return {
+      message: 'Something went wrong!',
+      success: false,
+    };
   }
 
   cookies().set('token', randomUUID());
+
+  return {
+    message: 'Account created successfully!',
+    success: true,
+  };
 };

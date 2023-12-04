@@ -5,6 +5,7 @@ import Post from '../Post/Post';
 import { Container } from '@mantine/core';
 
 type PostType = {
+  id: number;
   author: string;
   title: string;
   content: string;
@@ -15,7 +16,7 @@ type PostType = {
 type Comment = {
   author: string;
   body: string;
-}
+};
 
 const HomePageMain = ({ posts }: { posts: PostType[] | null }) => {
   return (
@@ -24,15 +25,7 @@ const HomePageMain = ({ posts }: { posts: PostType[] | null }) => {
 
       {posts?.length === 0 && <p>No posts yet. Be the first!</p>}
 
-      {posts?.map((post) => (
-        <Post
-          key={post.title}
-          author={post.author}
-          title={post.title}
-          content={post.content}
-          likes={post.likes}
-        />
-      ))}
+      {posts?.map((post) => <Post key={post.id} data={post} />)}
     </Container>
   );
 };

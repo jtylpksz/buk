@@ -1,15 +1,44 @@
 import { Modal, Button, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { createAccount } from '@/actions/createAccount';
+import { Toaster, toast } from 'sonner';
+import { useEffect } from 'react';
+import { useFormState } from 'react-dom';
 
-const SignUpModal = () => {
+import { createAccount } from '@/actions/createAccount';
+import SubmitButton from '../LoginModal/SubmitButton';
+import styles from './styles.module.css';
+
+const SignUpModal = ({
+  authSuccess,
+}: {
+  authSuccess: (value: boolean) => void;
+}) => {
   const [opened, { open, close }] = useDisclosure(false);
+
+  const [broadcast, formAction] = useFormState(createAccount, {
+    message: '',
+    success: false,
+  });
+
+  useEffect(() => {
+    if (broadcast.success && broadcast.message) {
+      toast.success(broadcast.message);
+      authSuccess(true);
+    } else if (!broadcast.success && broadcast.message) {
+      toast.error(broadcast.message);
+    }
+  }, [broadcast]);
 
   return (
     <>
       <Modal opened={opened} onClose={close} title="Sign Up" centered>
-        <form action={createAccount}>
-          <TextInput label="Username" placeholder="John Doe" name='username' required />
+        <form action={formAction}>
+          <TextInput
+            label="Username"
+            placeholder="John Doe"
+            name="username"
+            required
+          />
           <TextInput
             mt="md"
             label="Password"
@@ -21,13 +50,19 @@ const SignUpModal = () => {
             maxLength={20}
           />
 
-          <Button type="submit" mt="xl" fullWidth>
-            Create Account
-          </Button>
+          <SubmitButton
+            valueInRequest="Creating Account..."
+            defaultValue="Create Account"
+          />
         </form>
       </Modal>
 
       <Button onClick={open}>Sign Up</Button>
+
+      <div className={styles.absoluteNotification}>
+        {/* Prevents "Jumps" in the interface */}
+        <Toaster richColors />
+      </div>
     </>
   );
 };
