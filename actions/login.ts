@@ -1,8 +1,10 @@
 'use server';
+
+import { cookies } from 'next/headers';
+import { v4 as uuidv4 } from 'uuid';
+
 import { USERS_TABLE } from '@/keys/keys';
 import { supabase } from '@/lib/supabaseClient';
-import { cookies } from 'next/headers';
-import { randomUUID } from 'crypto';
 import { decrypt } from '@/lib/security/decrypt';
 
 export const login = async (_prevState: any, formData: FormData) => {
@@ -26,11 +28,12 @@ export const login = async (_prevState: any, formData: FormData) => {
   const decryptedPasswordFromDB = decrypt(data[0].password);
 
   if (decryptedPasswordFromDB.message === password) {
-    cookies().set('token', randomUUID());
+    cookies().set('token', uuidv4());
 
     return {
       message: 'Login successful!',
       success: true,
+      username: data[0].username,
     };
   }
   return {

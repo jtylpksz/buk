@@ -1,4 +1,4 @@
-import HomePageMain from '@/components/HomePageSection/HomePageMain';
+import HomePageMain from '@/components/HomePageMain/HomePageMain';
 import { POSTS_TABLE } from '@/keys/keys';
 import { supabase } from '@/lib/supabaseClient';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';

@@ -8,23 +8,28 @@ import { Toaster, toast } from 'sonner';
 
 import { login } from '@/actions/login';
 import styles from './styles.module.css';
-import SubmitButton from './SubmitButton';
+import SubmitButton from '../SubmitButton/SubmitButton';
 
 const LoginModal = ({
-  authSuccess,
+  setAuth,
 }: {
-  authSuccess: (value: boolean) => void;
+  setAuth: (value: {
+    message: string;
+    success: boolean;
+    username: string;
+  }) => void;
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [broadcast, formAction] = useFormState(login, {
     message: '',
     success: false,
+    username: '',
   });
 
   useEffect(() => {
     if (broadcast.success && broadcast.message) {
       toast.success(broadcast.message);
-      authSuccess(true);
+      setAuth(broadcast);
     } else if (!broadcast.success && broadcast.message) {
       toast.error(broadcast.message);
     }
@@ -39,6 +44,7 @@ const LoginModal = ({
             label="Username"
             placeholder="Username"
             name="username"
+            data-cy="usernameInput"
             required
             type="text"
           />
@@ -47,15 +53,22 @@ const LoginModal = ({
             label="Password"
             placeholder="Password"
             name="password"
+            data-cy="passwordInput"
             required
             type="password"
           />
 
-          <SubmitButton valueInRequest="Logging in..." defaultValue="Login" />
+          <SubmitButton
+            valueInRequest="Logging in..."
+            defaultValue="Login"
+            mt="xl"
+            fullWidth
+            data-cy="loginButton"
+          />
         </form>
       </Modal>
 
-      <Button onClick={open} variant="default">
+      <Button onClick={open} variant="default" data-cy="signInModalButton">
         Login
       </Button>
 

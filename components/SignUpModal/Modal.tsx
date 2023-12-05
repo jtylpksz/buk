@@ -5,25 +5,30 @@ import { useEffect } from 'react';
 import { useFormState } from 'react-dom';
 
 import { createAccount } from '@/actions/createAccount';
-import SubmitButton from '../LoginModal/SubmitButton';
+import SubmitButton from '../SubmitButton/SubmitButton';
 import styles from './styles.module.css';
 
 const SignUpModal = ({
-  authSuccess,
+  setAuth,
 }: {
-  authSuccess: (value: boolean) => void;
+  setAuth: (value: {
+    message: string;
+    success: boolean;
+    username: string;
+  }) => void;
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const [broadcast, formAction] = useFormState(createAccount, {
     message: '',
     success: false,
+    username: '',
   });
 
   useEffect(() => {
     if (broadcast.success && broadcast.message) {
       toast.success(broadcast.message);
-      authSuccess(true);
+      setAuth(broadcast);
     } else if (!broadcast.success && broadcast.message) {
       toast.error(broadcast.message);
     }
@@ -37,6 +42,7 @@ const SignUpModal = ({
             label="Username"
             placeholder="John Doe"
             name="username"
+            data-cy="usernameInput"
             required
           />
           <TextInput
@@ -46,6 +52,7 @@ const SignUpModal = ({
             name="password"
             required
             type="password"
+            data-cy="passwordInput"
             minLength={8}
             maxLength={20}
           />
@@ -53,11 +60,14 @@ const SignUpModal = ({
           <SubmitButton
             valueInRequest="Creating Account..."
             defaultValue="Create Account"
+            mt="xl"
+            fullWidth
+            data-cy="createAccountButton"
           />
         </form>
       </Modal>
 
-      <Button onClick={open}>Sign Up</Button>
+      <Button onClick={open} data-cy="signUpModalButton">Sign Up</Button>
 
       <div className={styles.absoluteNotification}>
         {/* Prevents "Jumps" in the interface */}

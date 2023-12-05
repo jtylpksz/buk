@@ -3,7 +3,7 @@
 import { USERS_TABLE } from '@/keys/keys';
 import { supabase } from '@/lib/supabaseClient';
 import { cookies } from 'next/headers';
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { encrypt } from '@/lib/security/encrypt';
 
 export const createAccount = async (_prevState: any, formData: FormData) => {
@@ -15,6 +15,14 @@ export const createAccount = async (_prevState: any, formData: FormData) => {
     password: encrypt(password),
   });
 
+  const message = `duplicate key value violates unique constraint "${USERS_TABLE}_username_key"`
+  if (error?.message.includes(message)) {
+    return {
+      message: 'Username already exists!',
+      success: false,
+    };
+  }
+
   if (error) {
     console.error(error.message);
 
@@ -24,10 +32,11 @@ export const createAccount = async (_prevState: any, formData: FormData) => {
     };
   }
 
-  cookies().set('token', randomUUID());
+  cookies().set('token', uuidv4());
 
   return {
     message: 'Account created successfully!',
     success: true,
+    username: username,
   };
 };

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import CreatePostForm from '../CreatePostForm/CreatePostForm';
 import Post from '../Post/Post';
 import { Container } from '@mantine/core';
@@ -19,9 +20,19 @@ type Comment = {
 };
 
 const HomePageMain = ({ posts }: { posts: PostType[] | null }) => {
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    const auth = localStorage.getItem('auth');
+
+    if (auth === 'true') {
+      setAuth(true);
+    }
+  }, []);
+    
   return (
     <Container size="xs">
-      <CreatePostForm />
+      {auth ? <CreatePostForm /> : null}
 
       {posts?.length === 0 && <p>No posts yet. Be the first!</p>}
 

@@ -1,30 +1,35 @@
 'use client';
 
-import { Box, Button, Group } from '@mantine/core';
+import { Box, Group } from '@mantine/core';
 
 import classes from './styles.module.css';
 import LoginModal from '../LoginModal/Modal';
 import SignUpModal from '../SignUpModal/Modal';
 import { useEffect, useState } from 'react';
+import Account from '../Account/Account';
 
 const Nav = () => {
   const [auth, setAuth] = useState(false);
+  const [username, setUsername] = useState('');
 
-  const isAuth = (value: boolean) => {
-    setAuth(value);
-    localStorage.setItem('auth', value.toString());
-  };
-
-  const logout = () => {
-    setAuth(false);
-    localStorage.setItem('auth', 'false');
+  const isAuth = (value: {
+    message: string;
+    success: boolean;
+    username: string;
+  }) => {
+    setAuth(true);
+    localStorage.setItem('auth', 'true');
+    localStorage.setItem('username', value.username);
+    window.location.reload();
   };
 
   useEffect(() => {
     const auth = localStorage.getItem('auth');
+    const username = localStorage.getItem('username');
 
     if (auth === 'true') {
       setAuth(true);
+      setUsername(username || 'error reading username');
     }
   }, []);
 
@@ -35,11 +40,11 @@ const Nav = () => {
           Buk.
           <Group>
             {auth ? (
-              <Button onClick={logout}>Logout</Button>
+              <Account username={username} />
             ) : (
               <>
-                <LoginModal authSuccess={isAuth} />
-                <SignUpModal authSuccess={isAuth} />
+                <LoginModal setAuth={isAuth} />
+                <SignUpModal setAuth={isAuth} />
               </>
             )}
           </Group>

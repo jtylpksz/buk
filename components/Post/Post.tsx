@@ -35,7 +35,8 @@ const Post = ({ data }: Post) => {
     }
   }, 300);
 
-  const like = () => {
+  const like = (event: React.FormEvent) => {
+    event.preventDefault();
     setLikesCount(likesCount + 1);
     sendLikesCountToDB(likesCount + 1);
   };
