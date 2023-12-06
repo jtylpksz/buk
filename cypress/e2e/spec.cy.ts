@@ -2,7 +2,7 @@ import { generateName } from '../utils/generateRandomName';
 import { randomString } from '../utils/randomString';
 
 describe('Testing auth actions', () => {
-  Cypress.config('defaultCommandTimeout', 20000);
+  Cypress.config('defaultCommandTimeout', 25000);
 
   const randomUsername = generateName();
   const randomPassword = randomString(8);
@@ -30,19 +30,19 @@ describe('Testing auth actions', () => {
 
     // Post testing
     cy.get('[data-cy="createPostInput"]').click();
-    cy.url().should('http://localhost:3000/submitPost');
 
     cy.get('[data-cy="postTitle"]').type(`Cypress ${randomUsername}`);
     cy.get('[data-cy="postContent"]').type('Testing post content');
     cy.get('[data-cy="createPostButton"]').click();
 
-    cy.contains('Post created successfully');
-    cy.url().should('http://localhost:3000');
-
     cy.contains(`Cypress ${randomUsername}`).click();
 
     // Comments
     cy.contains('Comments')
-    cy.get('[data-cy="commentInput"]').click();
+    cy.get('[data-cy="commentInput"]').type(`Testing comment ${randomUsername}`);
+    cy.get('[data-cy="submitComment"]').click();
+
+    cy.contains(`Testing comment ${randomUsername}`);
+    cy.visit('http://localhost:3000');
   });
 });

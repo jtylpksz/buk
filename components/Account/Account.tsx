@@ -1,5 +1,6 @@
 import { Menu, Button, rem } from '@mantine/core';
 import { IconSettings, IconTrash, IconArrowDown } from '@tabler/icons-react';
+import Link from 'next/link';
 
 const Account = ({ username }: { username: string }) => {
   const logout = () => {
@@ -21,14 +22,16 @@ const Account = ({ username }: { username: string }) => {
 
       <Menu.Dropdown>
         <Menu.Label>Options</Menu.Label>
-        <Menu.Item
-          leftSection={
-            <IconSettings style={{ width: rem(14), height: rem(14) }} />
-          }
-          data-cy="settingsButton"
-        >
-          Settings
-        </Menu.Item>
+        <Link href="/settings">
+          <Menu.Item
+            leftSection={
+              <IconSettings style={{ width: rem(14), height: rem(14) }} />
+            }
+            data-cy="settingsButton"
+          >
+            Settings
+          </Menu.Item>
+        </Link>
 
         <Menu.Divider />
 

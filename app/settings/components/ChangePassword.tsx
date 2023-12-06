@@ -28,11 +28,8 @@ const ChangePasswordModal = () => {
       .eq('username', username);
 
     const passwordOnDB = passwordUserOnDB[0].password;
-    console.log(passwordOnDB)
 
-    console.log(decrypt(passwordOnDB))
-
-    if (decrypt(passwordOnDB) === currentPassword) {
+    if (decrypt(passwordOnDB).message === currentPassword) {
       const { error } = await supabase
         .from(USERS_TABLE)
         .update({ password: encrypt(newPassword) })
@@ -51,7 +48,7 @@ const ChangePasswordModal = () => {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Login" centered>
+      <Modal opened={opened} onClose={close} title="Change Password" centered>
         <form onSubmit={changePassword}>
           <TextInput
             mt="md"

@@ -1,5 +1,6 @@
-import { Box, Button, Container, Text } from '@mantine/core';
+import { Box, Container, Text } from '@mantine/core';
 import ChangePasswordModal from './components/ChangePassword';
+import DeleteAccountModal from './components/DeleteAccount';
 
 const Settings = () => {
   return (
@@ -16,7 +17,7 @@ const Settings = () => {
       <Box mt="sm">
         <Text size="lg">Delete your account</Text>
         <Text size="sm">Warning: This action is permanent and cannot be undone.</Text>
-        <Button>Delete your account</Button>
+        <DeleteAccountModal />
       </Box>
     </Container>
   );

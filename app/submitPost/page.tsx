@@ -2,7 +2,6 @@
 
 import { Text, TextInput, Textarea, Container } from '@mantine/core';
 import SubmitButton from '@/components/SubmitButton/SubmitButton';
-import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { POSTS_TABLE } from '@/keys/keys';
 import { useRef } from 'react';
@@ -11,8 +10,6 @@ import { Toaster, toast } from 'sonner';
 const SubmitPost = () => {
   const titleRef: any = useRef<HTMLInputElement>(null);
   const contentRef: any = useRef<HTMLTextAreaElement>(null);
-
-  const router = useRouter();
 
   const submitPostToDB = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -35,7 +32,7 @@ const SubmitPost = () => {
     }
 
     toast.success('Post created successfully');
-    router.push('/');
+    window.location.href = '/';
   };
 
   return (
