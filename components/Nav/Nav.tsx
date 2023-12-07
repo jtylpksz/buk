@@ -1,12 +1,14 @@
 'use client';
 
-import { Box, Group } from '@mantine/core';
+import { Box, Flex, Group, Text } from '@mantine/core';
 
 import classes from './styles.module.css';
 import LoginModal from '../LoginModal/Modal';
 import SignUpModal from '../SignUpModal/Modal';
 import { useEffect, useState } from 'react';
 import Account from '../Account/Account';
+import SearchBar from './SearchBar';
+import Link from 'next/link';
 
 const Nav = () => {
   const [auth, setAuth] = useState(false);
@@ -37,7 +39,15 @@ const Nav = () => {
     <Box pb={20}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          Buk.
+          <Group>
+            <Link href="/">
+              <Text>Buk.</Text>
+            </Link>
+          </Group>
+
+          <Group>
+            <SearchBar />
+          </Group>
           <Group>
             {auth ? (
               <Account username={username} />
