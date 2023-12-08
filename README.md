@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Buk
+A Singular Social Network
 
-## Getting Started
+## Languages
+- [English](README.md)
+- [Spanish](README.es.md)
 
-First, run the development server:
+## Setup
+First, clone the project and install the dependencies:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```sh
+$ git clone https://github.com/martinval11/buk
+$ cd buk
+$ npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+We need to create a `.env.local` file to configure the database and other features:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+NEXT_PUBLIC_SUPABASE_URL= {YOUR SUPABASE URL}
+NEXT_PUBLIC_SUPABASE_KEY= {KEY OF YOUR SUPABASE DB}
+NEXT_PUBLIC_USERS_TABLE= {TABLE TO USE FOR USERS}
+NEXT_PUBLIC_POSTS_TABLE= {TABLE TO USE FOR POSTS}
+NEXT_PUBLIC_SECRET_KEY= {SECRET KEY FOR ENCRYPTING AND DECRYPTING DATA}
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Then, run the following command to start the development server:
 
-## Learn More
+```sh
+$ npm run dev
+   ▲ Next.js 14.0.3
+   - Local:        http://localhost:3000
+   - Environments: .env.local
 
-To learn more about Next.js, take a look at the following resources:
+ ✓ Ready in 7.2s
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts available:
+- `npm run dev`: Start the development server
+- `npm run build`: Build the project for production
+- `npm run start`: Start the production server
+- `npm run test`: Run tests with Cypress
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Technologies used
+- Next.js
+- Mantine
+- Supabase
+- TypeScript
+- Cypress
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Some context
+Buk is the successor of [Mitter](https://github.com/martinval11/Mitter), I abandoned it because of its complexity.
