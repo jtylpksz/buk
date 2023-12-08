@@ -45,10 +45,8 @@ const Nav = () => {
             </Link>
           </Group>
 
-          <Group>
+          <Group gap={10}>
             <SearchBar />
-          </Group>
-          <Group>
             {auth ? (
               <Account username={username} />
             ) : (

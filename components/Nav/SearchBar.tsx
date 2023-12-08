@@ -1,6 +1,7 @@
 'use client';
 
 import { Button, Group, TextInput } from '@mantine/core';
+import { IconSearch } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
@@ -19,9 +20,11 @@ const SearchBar = () => {
   };
 
   return (
-    <Group>
+    <Group gap={2} mr={5}>
       <TextInput placeholder="Search" ref={searchRef} />
-      <Button onClick={search}>Search</Button>
+      <Button onClick={search}>
+        <IconSearch />
+      </Button>
     </Group>
   );
 };
