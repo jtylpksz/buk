@@ -9,7 +9,8 @@ const SearchBar = () => {
   const router = useRouter();
   const searchRef: any = useRef<HTMLInputElement>(null);
 
-  const search = () => {
+  const search = (event: React.FormEvent) => {
+    event.preventDefault();
     const searchValue = searchRef.current.value;
 
     if (!searchValue) {
@@ -20,12 +21,14 @@ const SearchBar = () => {
   };
 
   return (
-    <Group gap={2} mr={5}>
-      <TextInput placeholder="Search" ref={searchRef} />
-      <Button onClick={search}>
-        <IconSearch />
-      </Button>
-    </Group>
+    <form onSubmit={search}>
+      <Group gap={2} mr={5}>
+        <TextInput placeholder="Search" ref={searchRef} />
+        <Button type="submit">
+          <IconSearch />
+        </Button>
+      </Group>
+    </form>
   );
 };
 
