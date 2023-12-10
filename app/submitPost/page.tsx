@@ -66,7 +66,7 @@ const SubmitPost = () => {
             valueInRequest="Creating Post..."
             fullWidth
             mt="md"
-            data-cy="createPostButton"
+            dataCy="createPostButton"
           />
         </form>
       </Container>

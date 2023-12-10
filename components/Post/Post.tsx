@@ -22,12 +22,12 @@ import Link from 'next/link';
 import { IconShare } from '@tabler/icons-react';
 
 type Post = {
-  id: number;
-  author: string;
-  title: string;
-  content: string;
-  likes: number;
-  comments: Array<Comment>;
+  id?: number;
+  author?: string;
+  title?: string;
+  content?: string;
+  likes?: number;
+  comments?: Array<Comment>;
   data: any;
 };
 

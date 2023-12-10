@@ -19,7 +19,7 @@ const SignUpModal = ({
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const [broadcast, formAction] = useFormState(createAccount, {
+  const [broadcast, formAction]: any = useFormState(createAccount, {
     message: '',
     success: false,
     username: '',

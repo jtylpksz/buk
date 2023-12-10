@@ -6,11 +6,15 @@ import { Button } from '@mantine/core';
 const SubmitButton = ({
 	defaultValue,
 	valueInRequest,
-	...props
+	mt,
+	fullWidth,
+	dataCy,
 }: {
 	defaultValue: string;
 	valueInRequest: string;
-	props: any;
+	mt?: string;
+	fullWidth?: boolean;
+	dataCy?: string
 }) => {
 	const { pending } = useFormStatus();
 
@@ -19,7 +23,9 @@ const SubmitButton = ({
 			type="submit"
 			aria-disabled={pending}
 			aria-busy={pending}
-			{...props}
+			mt={mt}
+			fullWidth={fullWidth}
+			data-cy={dataCy}
 		>
 			{pending ? valueInRequest : defaultValue}
 		</Button>

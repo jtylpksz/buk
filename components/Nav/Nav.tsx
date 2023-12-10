@@ -1,8 +1,8 @@
 'use client';
 
-import { Box, Flex, Group, Text } from '@mantine/core';
+import { Box, Group, Text } from '@mantine/core';
 
-import classes from './styles.module.css';
+import styles from './styles.module.css';
 import LoginModal from '../LoginModal/Modal';
 import SignUpModal from '../SignUpModal/Modal';
 import { useEffect, useState } from 'react';
@@ -37,7 +37,7 @@ const Nav = () => {
 
   return (
     <Box pb={20}>
-      <header className={classes.header}>
+      <header className={styles.header}>
         <Group justify="space-between" h="100%">
           <Group>
             <Link href="/">
@@ -47,14 +47,16 @@ const Nav = () => {
 
           <Group gap={10}>
             <SearchBar />
-            {auth ? (
-              <Account username={username} />
-            ) : (
-              <>
-                <LoginModal setAuth={isAuth} />
-                <SignUpModal setAuth={isAuth} />
-              </>
-            )}
+            <div className="accountContainer">
+              {auth ? (
+                <Account username={username} />
+              ) : (
+                <>
+                  <LoginModal setAuth={isAuth} />
+                  <SignUpModal setAuth={isAuth} />
+                </>
+              )}
+            </div>
           </Group>
         </Group>
       </header>

@@ -19,7 +19,7 @@ const DeleteAccountModal = () => {
     const username = localStorage.getItem('username');
     const password = passwordRef.current.value;
 
-    const { data: passwordUserOnDB } = await supabase
+    const { data: passwordUserOnDB }: any = await supabase
       .from(USERS_TABLE)
       .select('password')
       .eq('username', username);

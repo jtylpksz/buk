@@ -20,7 +20,7 @@ const LoginModal = ({
   }) => void;
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [broadcast, formAction] = useFormState(login, {
+  const [broadcast, formAction]: any = useFormState(login, {
     message: '',
     success: false,
     username: '',
@@ -63,7 +63,7 @@ const LoginModal = ({
             defaultValue="Login"
             mt="xl"
             fullWidth
-            data-cy="loginButton"
+            dataCy="loginButton"
           />
         </form>
       </Modal>

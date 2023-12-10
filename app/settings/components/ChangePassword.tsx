@@ -22,7 +22,7 @@ const ChangePasswordModal = () => {
     const currentPassword = currentPasswordRef.current.value;
     const newPassword = newPasswordRef.current.value;
 
-    const { data: passwordUserOnDB } = await supabase
+    const { data: passwordUserOnDB }: any = await supabase
       .from(USERS_TABLE)
       .select('password')
       .eq('username', username);

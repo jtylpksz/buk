@@ -3,21 +3,25 @@ import { POSTS_TABLE } from '@/keys/keys';
 import { supabase } from '@/lib/supabaseClient';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
 
-type Post = {
-  id: string;
+type PostType = {
+  id: number;
   author: string;
   title: string;
   content: string;
-  created_at: string;
+  likes: number;
+  comments: Array<Comment>;
+};
+
+type Comment = {
+  author: string;
+  body: string;
 };
 
 export const dynamic = 'force-dynamic'; // Prevent caching
 
 const getPosts = async () => {
-  const { data: posts, error }: PostgrestSingleResponse<Post[]> = await supabase
-    .from(POSTS_TABLE)
-    .select('*')
-    .order('created_at');
+  const { data: posts, error }: PostgrestSingleResponse<PostType[]> =
+    await supabase.from(POSTS_TABLE).select('*').order('created_at');
 
   if (error) {
     console.log(error);
@@ -27,7 +31,7 @@ const getPosts = async () => {
 };
 
 const Home = async () => {
-  const posts: Post[] | null = await getPosts();
+  const posts: PostType[] | null = await getPosts();
 
   return <HomePageMain posts={posts} />;
 };
