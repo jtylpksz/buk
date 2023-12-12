@@ -27,6 +27,15 @@ export const login = async (_prevState: any, formData: FormData) => {
 
   const decryptedPasswordFromDB = decrypt(data[0].password);
 
+  // use cases
+
+  if (
+    decryptedPasswordFromDB.message ===
+    'Error decrypting data, please report the issue on GitHub'
+  ) {
+    return decryptedPasswordFromDB;
+  }
+
   if (decryptedPasswordFromDB.message === password) {
     cookies().set('token', uuidv4());
 
