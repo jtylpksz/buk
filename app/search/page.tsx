@@ -20,6 +20,10 @@ type Comment = {
   body: string;
 };
 
+// disable cache
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const getPosts = async (query: string) => {
   const { data: posts, error }: PostgrestSingleResponse<PostType[]> =
     await supabase
@@ -29,7 +33,8 @@ const getPosts = async (query: string) => {
       .order('created_at');
 
   if (error) {
-    console.log(error);
+    console.error(error);
+    return null;
   }
 
   return posts;

@@ -21,6 +21,7 @@ const ChangePasswordModal = () => {
     const username = localStorage.getItem('username');
     const currentPassword = currentPasswordRef.current.value;
     const newPassword = newPasswordRef.current.value;
+    console.table({ username, currentPassword, newPassword });
 
     const { data: passwordUserOnDB }: any = await supabase
       .from(USERS_TABLE)
@@ -57,8 +58,8 @@ const ChangePasswordModal = () => {
             name="currentPassword"
             ref={currentPasswordRef}
             data-cy="currentPasswordInput"
-            required
             type="password"
+            required
           />
           <TextInput
             mt="md"
@@ -67,8 +68,8 @@ const ChangePasswordModal = () => {
             name="password"
             ref={newPasswordRef}
             data-cy="newPasswordInput"
-            required
             type="password"
+            required
           />
 
           <Button

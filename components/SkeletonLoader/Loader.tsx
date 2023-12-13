@@ -1,7 +1,7 @@
 import ContentLoader from 'react-content-loader';
 import { Container } from '@mantine/core';
 
-const Loader = ({ props }: any) => {
+const Loader = ({ props }: React.ComponentProps<any>) => {
   return (
     <Container size="xs">
       <ContentLoader

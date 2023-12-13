@@ -4,6 +4,10 @@ import { supabase } from '@/lib/supabaseClient';
 import { Container } from '@mantine/core';
 import Comments from '@/components/Comments/Comments';
 
+// Disable cache
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const getData = async (id: string) => {
   const { data, error } = await supabase
     .from(POSTS_TABLE)
@@ -17,8 +21,6 @@ const getData = async (id: string) => {
 
   return data;
 };
-
-export const dynamic = 'force-dynamic';
 
 const post = async ({ searchParams }: { searchParams: { id: string } }) => {
   const { id } = searchParams;

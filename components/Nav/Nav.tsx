@@ -1,14 +1,14 @@
 'use client';
 
 import { Box, Group, Text } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 import styles from './styles.module.css';
 import LoginModal from '../LoginModal/Modal';
 import SignUpModal from '../SignUpModal/Modal';
-import { useEffect, useState } from 'react';
 import Account from '../Account/Account';
 import SearchBar from './SearchBar';
-import Link from 'next/link';
 
 const Nav = () => {
   const [auth, setAuth] = useState(false);
@@ -40,7 +40,7 @@ const Nav = () => {
       <header className={styles.header}>
         <Group justify="space-between" h="100%">
           <Group>
-            <Link href="/">
+            <Link href="/" data-cy="bukLogo">
               <Text>Buk.</Text>
             </Link>
           </Group>

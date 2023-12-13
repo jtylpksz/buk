@@ -12,17 +12,15 @@ import {
   Modal,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconDots, IconTrash } from '@tabler/icons-react';
+import { IconDots, IconTrash, IconShare } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { IconShare } from '@tabler/icons-react';
 import { Toaster, toast } from 'sonner';
-import { useDebouncedCallback } from 'use-debounce';
 import { useState, useEffect } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { supabase } from '@/lib/supabaseClient';
 import { POSTS_TABLE } from '@/keys/keys';
-
 
 type Post = {
   id?: number;

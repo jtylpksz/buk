@@ -17,7 +17,6 @@ const CreatePostForm = () => {
       placeholder="Create Post"
       onClick={redirectToSubmitPostPage}
       data-cy="createPostInput"
-      required
     />
   );
 };

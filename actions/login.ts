@@ -1,15 +1,24 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { revalidateTag } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
 
 import { USERS_TABLE } from '@/keys/keys';
 import { supabase } from '@/lib/supabaseClient';
 import { decrypt } from '@/lib/security/decrypt';
+import { sendErrorToClient } from '@/lib/sendErrorToClient';
 
 export const login = async (_prevState: any, formData: FormData) => {
   const username = formData.get('username');
   const password = formData.get('password');
+
+  // Syncronize data with supabase, this is useful if you changed your password
+  revalidateTag('users');
+
+  if (!username || !password) {
+    return sendErrorToClient('Please fill in all fields');
+  }
 
   const { data, error } = await supabase
     .from(USERS_TABLE)
@@ -18,16 +27,16 @@ export const login = async (_prevState: any, formData: FormData) => {
 
   if (error) {
     console.error(error.message);
+    return sendErrorToClient('Something went wrong!');
+  }
 
-    return {
-      message: 'Something went wrong!',
-      success: false,
-    };
+  if (data?.length === 0 || data === null) {
+    return sendErrorToClient('User not found!');
   }
 
   const decryptedPasswordFromDB = decrypt(data[0].password);
 
-  // use cases
+  // Use cases
 
   if (
     decryptedPasswordFromDB.message ===
@@ -35,6 +44,8 @@ export const login = async (_prevState: any, formData: FormData) => {
   ) {
     return decryptedPasswordFromDB;
   }
+
+  console.table({ password, decryptedPasswordFromDB });
 
   if (decryptedPasswordFromDB.message === password) {
     cookies().set('token', uuidv4());
@@ -45,8 +56,5 @@ export const login = async (_prevState: any, formData: FormData) => {
       username: data[0].username,
     };
   }
-  return {
-    message: 'Login failed, check your credentials.',
-    success: false,
-  };
+  return sendErrorToClient('Login failed, check your credentials.');
 };

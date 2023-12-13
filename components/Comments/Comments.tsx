@@ -70,7 +70,7 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
           <SubmitButton
             defaultValue="Comment"
             valueInRequest="Submitting Comment..."
-            data-cy="submitComment"
+            dataCy="submitComment"
           />
         </form>
       ) : (

@@ -17,11 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <ColorSchemeScript suppressHydrationWarning />
         {/* 
           ! Comment this line while you are using cypress, 
-          ! it has hydration issues, even with the `suppressHydrationWarning` 
+          ! it has hydration issues, even with the `suppressHydrationWarning` attribute 
         */}
+        <ColorSchemeScript suppressHydrationWarning />
       </head>
       <body>
         <MantineProvider defaultColorScheme="auto">

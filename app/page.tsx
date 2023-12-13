@@ -22,25 +22,29 @@ type Comment = {
 
 export const dynamic = 'force-dynamic'; // Prevent caching
 
-const getPosts = async () => {
+const getPosts = async (pages: number) => {
   const { data: posts, error }: PostgrestSingleResponse<PostType[]> =
     await supabase.from(POSTS_TABLE).select('*').order('created_at');
 
   if (error) {
-    console.log(error);
+    console.error(error);
+    return null;
   }
 
-  return posts;
+  // 10 posts per page, next page you will get the next 10 posts on the Array
+  const postsAmountPerPage = posts?.slice(pages * 20, 20 * (pages + 1)) ?? null;
+
+  return postsAmountPerPage;
 };
 
-const Home = async () => {
-  const posts: PostType[] | null = await getPosts();
+const Home = async ({ searchParams }: { searchParams: { page: number } }) => {
+  const posts: PostType[] | null = await getPosts(searchParams?.page || 0);
 
   return (
     <Suspense fallback={<Loader />}>
       <HomePageMain posts={posts} />
     </Suspense>
-  ) 
+  );
 };
 
 export default Home;

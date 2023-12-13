@@ -42,20 +42,20 @@ const LoginModal = ({
           <TextInput
             mt="md"
             label="Username"
-            placeholder="Username"
+            placeholder="Type here your username"
             name="username"
             data-cy="usernameInput"
-            required
             type="text"
+            required
           />
           <TextInput
             mt="md"
             label="Password"
-            placeholder="Password"
+            placeholder="Type here your password"
             name="password"
             data-cy="passwordInput"
-            required
             type="password"
+            required
           />
 
           <SubmitButton

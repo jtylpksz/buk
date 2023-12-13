@@ -56,7 +56,7 @@ const DeleteAccountModal = () => {
             placeholder="Write here your password"
             name="currentPassword"
             ref={passwordRef}
-            data-cy="currentPasswordInput"
+            data-cy="passwordInput"
             required
             type="password"
           />
@@ -65,14 +65,14 @@ const DeleteAccountModal = () => {
             type="submit"
             mt="xl"
             fullWidth
-            data-cy="changePasswordButton"
+            data-cy="deleteAccountButton"
           >
             Delete Account
           </Button>
         </form>
       </Modal>
 
-      <Button onClick={open} data-cy="changePasswordOpenModalButton">
+      <Button onClick={open} data-cy="deleteAccountOpenModalButton">
         Delete Your Account
       </Button>
 

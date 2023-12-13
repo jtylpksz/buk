@@ -40,9 +40,10 @@ const SignUpModal = ({
         <form action={formAction}>
           <TextInput
             label="Username"
-            placeholder="John Doe"
+            placeholder="Type here your username"
             name="username"
             data-cy="usernameInput"
+            type="text"
             required
           />
           <TextInput
@@ -50,11 +51,11 @@ const SignUpModal = ({
             label="Password"
             placeholder="Min 8 characters"
             name="password"
-            required
             type="password"
             data-cy="passwordInput"
             minLength={8}
-            maxLength={20}
+            maxLength={24}
+            required
           />
 
           <SubmitButton
@@ -62,7 +63,7 @@ const SignUpModal = ({
             defaultValue="Create Account"
             mt="xl"
             fullWidth
-            data-cy="createAccountButton"
+            dataCy="createAccountButton"
           />
         </form>
       </Modal>

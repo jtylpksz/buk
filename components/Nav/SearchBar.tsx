@@ -23,8 +23,8 @@ const SearchBar = () => {
   return (
     <form onSubmit={search}>
       <Group gap={2} mr={5}>
-        <TextInput placeholder="Search" ref={searchRef} />
-        <Button type="submit">
+        <TextInput placeholder="Search" ref={searchRef} data-cy="searchInput" />
+        <Button type="submit" data-cy="searchButton">
           <IconSearch />
         </Button>
       </Group>

@@ -1,8 +1,9 @@
 'use server';
 
+import { revalidateTag } from 'next/cache';
+
 import { supabase } from '@/lib/supabaseClient';
 import { POSTS_TABLE } from '@/keys/keys';
-import { revalidateTag } from 'next/cache';
 
 export const submitPostToDB = async (_prevState: any, formData: FormData) => {
   const title = formData.get('title');
