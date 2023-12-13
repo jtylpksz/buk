@@ -1,7 +1,10 @@
-import { POSTS_TABLE } from "@/keys/keys";
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabaseClient";
-import HomePageMain from "@/components/HomePageMain/HomePageMain";
+import { PostgrestSingleResponse } from '@supabase/supabase-js';
+import { Suspense } from 'react';
+
+import { POSTS_TABLE } from '@/keys/keys';
+import { supabase } from '@/lib/supabaseClient';
+import HomePageMain from '@/components/HomePageMain/HomePageMain';
+import Loader from '@/components/SkeletonLoader/Loader';
 
 type PostType = {
   id: number;
@@ -17,13 +20,13 @@ type Comment = {
   body: string;
 };
 
-
 const getPosts = async (query: string) => {
-  const { data: posts, error }: PostgrestSingleResponse<PostType[]> = await supabase
-    .from(POSTS_TABLE)
-    .select('*')
-    .ilike('title', `%${query}%`)
-    .order('created_at');
+  const { data: posts, error }: PostgrestSingleResponse<PostType[]> =
+    await supabase
+      .from(POSTS_TABLE)
+      .select('*')
+      .ilike('title', `%${query}%`)
+      .order('created_at');
 
   if (error) {
     console.log(error);
@@ -32,11 +35,19 @@ const getPosts = async (query: string) => {
   return posts;
 };
 
-const Search = async ({ searchParams }: { searchParams: { query: string } }) => { 
+const Search = async ({
+  searchParams,
+}: {
+  searchParams: { query: string };
+}) => {
   const { query } = searchParams;
   const posts: PostType[] | null = await getPosts(query);
 
-  return <HomePageMain posts={posts} />;
-}
+  return (
+    <Suspense fallback={<Loader />}>
+      <HomePageMain posts={posts} />
+    </Suspense>
+  );
+};
 
 export default Search;

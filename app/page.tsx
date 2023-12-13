@@ -1,7 +1,10 @@
+import { PostgrestSingleResponse } from '@supabase/supabase-js';
+import { Suspense } from 'react';
+
 import HomePageMain from '@/components/HomePageMain/HomePageMain';
 import { POSTS_TABLE } from '@/keys/keys';
 import { supabase } from '@/lib/supabaseClient';
-import { PostgrestSingleResponse } from '@supabase/supabase-js';
+import Loader from '@/components/SkeletonLoader/Loader';
 
 type PostType = {
   id: number;
@@ -33,7 +36,11 @@ const getPosts = async () => {
 const Home = async () => {
   const posts: PostType[] | null = await getPosts();
 
-  return <HomePageMain posts={posts} />;
+  return (
+    <Suspense fallback={<Loader />}>
+      <HomePageMain posts={posts} />
+    </Suspense>
+  ) 
 };
 
 export default Home;

@@ -13,13 +13,16 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconDots, IconTrash } from '@tabler/icons-react';
-import { supabase } from '@/lib/supabaseClient';
-import { useDebouncedCallback } from 'use-debounce';
-import { useState } from 'react';
-import { POSTS_TABLE } from '@/keys/keys';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { IconShare } from '@tabler/icons-react';
+import { Toaster, toast } from 'sonner';
+import { useDebouncedCallback } from 'use-debounce';
+import { useState, useEffect } from 'react';
+
+import { supabase } from '@/lib/supabaseClient';
+import { POSTS_TABLE } from '@/keys/keys';
+
 
 type Post = {
   id?: number;
@@ -34,8 +37,12 @@ type Post = {
 const Post = ({ data }: Post) => {
   const { id, author, title, content, likes, comments } = data;
   const [likesCount, setLikesCount] = useState(likes);
-  const router = useRouter();
+  const [username, setUsername] = useState('');
+  const [auth, setAuth] = useState(false);
+  const [toastAlert, setToastAlert] = useState(false); // To prevent multiple alerts
+
   const [opened, { open, close }] = useDisclosure(false);
+  const router = useRouter();
 
   const sendLikesCountToDB = useDebouncedCallback(async (count) => {
     const { error } = await supabase
@@ -51,8 +58,15 @@ const Post = ({ data }: Post) => {
 
   const like = (event: any) => {
     event.preventDefault();
-    setLikesCount(likesCount + 1);
-    sendLikesCountToDB(likesCount + 1);
+
+    if (auth && username) {
+      setLikesCount(likesCount + 1);
+      sendLikesCountToDB(likesCount + 1);
+      return;
+    }
+
+    setToastAlert(true);
+    toast.error('You need to be logged in to like posts');
   };
 
   const comment = () => {
@@ -82,6 +96,13 @@ const Post = ({ data }: Post) => {
     navigator.clipboard.writeText(`https://buk.vercel.app/post?id=${id}`);
     close(); // close the modal
   };
+
+  useEffect(() => {
+    const username: any = localStorage?.getItem('username');
+    const auth: any = localStorage?.getItem('auth');
+    setUsername(username);
+    setAuth(auth);
+  }, [username]);
 
   return (
     <>
@@ -113,7 +134,7 @@ const Post = ({ data }: Post) => {
                   >
                     Share
                   </Menu.Item>
-                  {author === localStorage?.getItem('username') ? (
+                  {author === username && auth ? (
                     <Menu.Item
                       onClick={deletePost}
                       leftSection={
@@ -169,6 +190,7 @@ const Post = ({ data }: Post) => {
           <Button onClick={copyPostLink}>Copy URL and close</Button>
         </Flex>
       </Modal>
+      {toastAlert ? <Toaster richColors /> : null}
     </>
   );
 };
