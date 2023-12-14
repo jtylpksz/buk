@@ -16,7 +16,7 @@ const SubmitPost = () => {
       router.push('/');
       return;
     }
-  }, []);
+  }, [router]);
 
   return <SubmitPostForm />;
 };

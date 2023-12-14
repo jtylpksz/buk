@@ -33,7 +33,7 @@ const LoginModal = ({
     } else if (!broadcast.success && broadcast.message) {
       toast.error(broadcast.message);
     }
-  }, [broadcast]);
+  }, [broadcast, setAuth]);
 
   return (
     <>

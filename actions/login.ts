@@ -45,8 +45,6 @@ export const login = async (_prevState: any, formData: FormData) => {
     return decryptedPasswordFromDB;
   }
 
-  console.table({ password, decryptedPasswordFromDB });
-
   if (decryptedPasswordFromDB.message === password) {
     cookies().set('token', uuidv4());
 

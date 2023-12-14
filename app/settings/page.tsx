@@ -18,7 +18,7 @@ const Settings = () => {
       router.push('/');
       return;
     }
-  }, []);
+  }, [router]);
 
   return (
     <Container size="xs">
