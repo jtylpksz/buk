@@ -9,7 +9,6 @@ import { useSearchParams } from 'next/navigation';
 import CreatePostForm from '../CreatePostForm/CreatePostForm';
 import Post from '../Post/Post';
 
-
 type PostType = {
   id: number;
   author: string;
@@ -49,21 +48,32 @@ const HomePageMain = ({ posts }: { posts: PostType[] | null }) => {
 
       <Flex component="footer" justify="center" gap={10} pb={20}>
         {/* TODO: Change this invalid syntax (button inside anchor) */}
-        <Link
-          href={{
-            pathname: '/',
-            query: { page: pageNumber - 1 < 0 ? 0 : pageNumber - 1 },
-          }}
-        >
-          <Button>
-            <IconArrowLeft /> Prev Page
-          </Button>
-        </Link>
-        <Link href={{ pathname: '/', query: { page: pageNumber + 1 } }}>
-          <Button>
-            Next Page <IconArrowRight />
-          </Button>
-        </Link>
+
+        {pageNumber > 0 ? (
+          <Link
+            href={{
+              pathname: '/',
+              query: { page: pageNumber - 1 < 0 ? 0 : pageNumber - 1 },
+            }}
+          >
+            <Button>
+              <IconArrowLeft /> Prev Page
+            </Button>
+          </Link>
+        ) : null}
+
+        {posts!.length > 20 ? (
+          <Link
+            href={{
+              pathname: '/',
+              query: { page: pageNumber + 1 },
+            }}
+          >
+            <Button>
+              Next Page <IconArrowRight />
+            </Button>
+          </Link>
+        ) : null}
       </Flex>
     </Container>
   );

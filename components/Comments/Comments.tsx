@@ -1,12 +1,12 @@
 'use client';
 
-import { Textarea, Text, Card } from '@mantine/core';
+import { Textarea, Text, Card, Button } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { Toaster, toast } from 'sonner';
 
 import { supabase } from '@/lib/supabaseClient';
 import { POSTS_TABLE } from '@/keys/keys';
-import SubmitButton from '../SubmitButton/SubmitButton';
 
 type CommentType = {
   id: string;
@@ -14,13 +14,20 @@ type CommentType = {
   body: string;
 };
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
   const [username, setUsername] = useState('');
   const [comments, setComments] = useState(data);
-  const commentBody = useRef<HTMLTextAreaElement>(null);
+  const [pending, setPending] = useState(false);
+
+  const commentBody: any = useRef<HTMLTextAreaElement>(null);
 
   const commentPost = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setPending(true);
+
     const body = commentBody.current?.value;
     const author = localStorage.getItem('username');
 
@@ -38,8 +45,12 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
 
     if (error) {
       console.log(error);
+      toast.error('Something went wrong, please try again!');
     } else {
       setComments(data[0].comments);
+      setPending(false);
+      toast.success('Comment submitted successfully!');
+      commentBody.current.value = '';
     }
   };
 
@@ -58,7 +69,7 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
           <Textarea
             label="Comment"
             placeholder="What are your thoughts?"
-            name="comment"
+            name="body"
             ref={commentBody}
             data-cy="commentInput"
             autosize
@@ -67,11 +78,10 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
             mb="sm"
             required
           />
-          <SubmitButton
-            defaultValue="Comment"
-            valueInRequest="Submitting Comment..."
-            dataCy="submitComment"
-          />
+
+          <Button type="submit" data-cy="submitComment">
+            {pending ? 'Submitting Comment...' : 'Comment'}
+          </Button>
         </form>
       ) : (
         <Text size="sm" c="dimmed">
@@ -95,6 +105,7 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
           </Text>
         </Card>
       ))}
+      <Toaster richColors />
     </>
   );
 };

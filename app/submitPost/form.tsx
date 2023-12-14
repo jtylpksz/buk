@@ -1,6 +1,6 @@
 'use client';
 
-import { Text, TextInput, Textarea, Container } from '@mantine/core';
+import { TextInput, Textarea, Container } from '@mantine/core';
 import { useFormState } from 'react-dom';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -35,7 +35,7 @@ const SubmitPostForm = () => {
     <>
       <Container size="xs">
         <form action={formAction}>
-          <Text size="xl">Create Post</Text>
+          <h1>Create Post</h1>
           <TextInput
             mt="sm"
             placeholder="Type here your title"
