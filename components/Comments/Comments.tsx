@@ -14,6 +14,7 @@ import { IconDots, IconTrash } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Toaster, toast } from 'sonner';
+import { Logger } from 'next-axiom';
 
 import { supabase } from '@/lib/supabaseClient';
 import { POSTS_TABLE } from '@/keys/keys';
@@ -34,6 +35,8 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
   const [pending, setPending] = useState(false);
 
   const commentBody: any = useRef<HTMLTextAreaElement>(null);
+
+  const log = new Logger();
 
   const commentPost = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,11 +59,13 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
 
     if (error) {
       console.log(error);
+      log.error('Error Comments', error);
       toast.error('Something went wrong, please try again!');
     } else {
       setComments(data[0].comments);
       setPending(false);
       toast.success('Comment submitted successfully!');
+      log.info('Comment submitted successfully!');
       commentBody.current.value = '';
     }
   };
@@ -88,6 +93,7 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
 
     if (error) {
       console.log(error);
+      log.error('Error delete Comments', error);
       toast.error('Something went wrong, please try again!');
     }
 
@@ -100,6 +106,7 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
     const auth: any = localStorage?.getItem('auth');
 
     if (username && auth) {
+      log.debug(`Username: ${username}, Auth: ${auth}`);
       setUsername(username);
       setAuth(auth);
     }
@@ -145,19 +152,19 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
           <Card.Section withBorder inheritPadding py="xs">
             <Group justify="space-between">
               <Text fw={500}>{comment.author}</Text>
-              <Menu withinPortal position="bottom-end" shadow="sm">
-                <Menu.Target>
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    onClick={(event) => event.preventDefault()}
-                  >
-                    <IconDots style={{ width: rem(16), height: rem(16) }} />
-                  </ActionIcon>
-                </Menu.Target>
+              {comment.author === username && auth ? (
+                <Menu withinPortal position="bottom-end" shadow="sm">
+                  <Menu.Target>
+                    <ActionIcon
+                      variant="subtle"
+                      color="gray"
+                      onClick={(event) => event.preventDefault()}
+                    >
+                      <IconDots style={{ width: rem(16), height: rem(16) }} />
+                    </ActionIcon>
+                  </Menu.Target>
 
-                <Menu.Dropdown>
-                  {comment.author === username && auth ? (
+                  <Menu.Dropdown>
                     <Menu.Item
                       id={comment.id}
                       onClick={deleteComment}
@@ -170,9 +177,9 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
                     >
                       Delete
                     </Menu.Item>
-                  ) : null}
-                </Menu.Dropdown>
-              </Menu>
+                  </Menu.Dropdown>
+                </Menu>
+              ) : null}
             </Group>
           </Card.Section>
 

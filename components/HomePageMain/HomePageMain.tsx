@@ -5,6 +5,7 @@ import { Button, Container, Flex } from '@mantine/core';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useLogger } from 'next-axiom';
 
 import CreatePostForm from '../CreatePostForm/CreatePostForm';
 import Post from '../Post/Post';
@@ -30,11 +31,14 @@ const HomePageMain = ({ posts }: { posts: PostType[] | null }) => {
   const pageParam = searchParams.get('page');
   const pageNumber = pageParam ? parseInt(pageParam) : 0;
 
+  const log = useLogger();
+
   useEffect(() => {
-    const auth = localStorage.getItem('auth');
+    const auth: any = localStorage.getItem('auth');
 
     if (auth === 'true') {
       setAuth(true);
+      log.debug('Auth set to true', auth);
     }
   }, []);
 

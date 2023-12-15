@@ -8,9 +8,11 @@ import { useRef } from 'react';
 import { USERS_TABLE } from '@/keys/keys';
 import { encrypt } from '@/lib/security/encrypt';
 import { decrypt } from '@/lib/security/decrypt';
+import { useLogger } from 'next-axiom';
 
 const ChangePasswordModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const log = useLogger();
 
   const currentPasswordRef: any = useRef<HTMLInputElement>(null);
   const newPasswordRef: any = useRef<HTMLInputElement>(null);
@@ -38,10 +40,12 @@ const ChangePasswordModal = () => {
 
       if (error) {
         toast.error('Something went wrong.');
+        log.error(`changePassword: ${error.message}`);
         throw new Error(error.message);
       }
 
       toast.success('Password changed successfully.');
+      log.info('Password changed successfully.');
       return;
     }
     toast.error('Passwords do not match.');

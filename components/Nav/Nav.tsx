@@ -9,10 +9,12 @@ import LoginModal from '../LoginModal/Modal';
 import SignUpModal from '../SignUpModal/Modal';
 import Account from '../Account/Account';
 import SearchBar from './SearchBar';
+import { useLogger } from 'next-axiom';
 
 const Nav = () => {
   const [auth, setAuth] = useState(false);
   const [username, setUsername] = useState('');
+  const log = useLogger();
 
   const isAuth = (value: {
     message: string;
@@ -32,6 +34,10 @@ const Nav = () => {
     if (auth === 'true') {
       setAuth(true);
       setUsername(username || 'error reading username');
+    }
+
+    if (username === 'error reading username') {
+      log.error(`Error reading username: ${username}`);
     }
   }, []);
 
