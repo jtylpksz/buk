@@ -5,6 +5,7 @@ import { POSTS_TABLE } from '@/keys/keys';
 import { supabase } from '@/lib/supabaseClient';
 import HomePageMain from '@/components/HomePageMain/HomePageMain';
 import Loader from '@/components/SkeletonLoader/Loader';
+import {Logger} from 'next-axiom';
 
 type PostType = {
   id: number;
@@ -25,6 +26,8 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 const getPosts = async (query: string) => {
+  const log = new Logger();
+
   const { data: posts, error }: PostgrestSingleResponse<PostType[]> =
     await supabase
       .from(POSTS_TABLE)
@@ -34,9 +37,11 @@ const getPosts = async (query: string) => {
 
   if (error) {
     console.error(error);
+    log.error(error.message);
     return null;
   }
 
+  log.info('Posts fetched successfully on Search');
   return posts;
 };
 

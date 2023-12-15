@@ -1,5 +1,6 @@
 import { Container, Flex } from '@mantine/core';
 import { Metadata } from 'next';
+import { Logger } from 'next-axiom';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -12,6 +13,9 @@ export const metadata: Metadata = {
 };
 
 const NotFound = () => {
+	const log = new Logger();
+	log.info('Page not found');
+
 	return (
 		<Container size="xs">
 			<Flex justify="center" align="center" direction="column">

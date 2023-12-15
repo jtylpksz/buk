@@ -2,11 +2,13 @@
 
 import { Button, Group, TextInput } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
+import {useLogger} from 'next-axiom';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
 const SearchBar = () => {
   const router = useRouter();
+  const log = useLogger();
   const searchRef: any = useRef<HTMLInputElement>(null);
 
   const search = (event: React.FormEvent) => {
@@ -17,6 +19,7 @@ const SearchBar = () => {
       return;
     }
 
+    log.info(`searching for ${searchValue}, URL: /search?query=${searchValue}`);
     router.push(`/search?query=${searchValue}`);
   };
 

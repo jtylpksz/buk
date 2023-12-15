@@ -21,6 +21,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { supabase } from '@/lib/supabaseClient';
 import { POSTS_TABLE } from '@/keys/keys';
+import {useLogger} from 'next-axiom';
 
 type Post = {
   id?: number;
@@ -42,6 +43,8 @@ const Post = ({ data }: Post) => {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
 
+  const log = useLogger();
+
   const sendLikesCountToDB = useDebouncedCallback(async (count) => {
     const { error } = await supabase
       .from(POSTS_TABLE)
@@ -50,7 +53,8 @@ const Post = ({ data }: Post) => {
       .select();
 
     if (error) {
-      console.log('error', error);
+      console.error(error);
+      log.error(`Error updating likes count: ${error}`)
     }
   }, 300);
 
@@ -65,6 +69,7 @@ const Post = ({ data }: Post) => {
 
     setToastAlert(true);
     toast.error('You need to be logged in to like posts');
+    log.error('You need to be logged in to like posts');
   };
 
   const comment = () => {
@@ -84,7 +89,8 @@ const Post = ({ data }: Post) => {
     const { error } = await supabase.from(POSTS_TABLE).delete().eq('id', id);
 
     if (error) {
-      console.log('error', error);
+      console.error(error);
+      log.error(`Error deleting post: ${error}`);
     }
 
     window.location.href = '/';

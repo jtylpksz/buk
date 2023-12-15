@@ -1,5 +1,6 @@
 import '@mantine/core/styles.css';
 import './globals.css';
+import { AxiomWebVitals } from 'next-axiom';
 
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import Nav from '@/components/Nav/Nav';
@@ -22,6 +23,7 @@ export default function RootLayout({
           ! it has hydration issues, even with the `suppressHydrationWarning` attribute 
         */}
         <ColorSchemeScript suppressHydrationWarning />
+        <AxiomWebVitals />
       </head>
       <body>
         <MantineProvider defaultColorScheme="auto">

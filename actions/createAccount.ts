@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
+import { Logger } from 'next-axiom';
 
 import { USERS_TABLE } from '@/keys/keys';
 import { supabase } from '@/lib/supabaseClient';
@@ -11,6 +12,8 @@ import { sendErrorToClient } from '@/lib/sendErrorToClient';
 export const createAccount = async (_prevState: any, formData: FormData) => {
   const username = formData.get('username') as string;
   const password = formData.get('password') as string;
+
+  const log = new Logger();
 
   // Use cases
   if (!username || !password) {
@@ -22,7 +25,7 @@ export const createAccount = async (_prevState: any, formData: FormData) => {
   }
 
   if (password.length > 24) {
-    return sendErrorToClient('Password must be less than 20 characters long!');
+    return sendErrorToClient('Password must be less than 24 characters long!');
   }
 
   // Principal use case
@@ -38,10 +41,12 @@ export const createAccount = async (_prevState: any, formData: FormData) => {
 
   if (error) {
     console.error(error.message);
+    log.error('Error creating account:', error);
     return sendErrorToClient('Something went wrong!');
   }
 
   cookies().set('token', uuidv4());
+  log.info('Account created successfully!');
 
   return {
     message: 'Account created successfully!',

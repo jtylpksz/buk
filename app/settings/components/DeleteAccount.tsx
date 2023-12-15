@@ -7,9 +7,11 @@ import { useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { USERS_TABLE } from '@/keys/keys';
 import { decrypt } from '@/lib/security/decrypt';
+import {useLogger} from 'next-axiom';
 
 const DeleteAccountModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const log = useLogger();
 
   const passwordRef: any = useRef<HTMLInputElement>(null);
 
@@ -34,10 +36,12 @@ const DeleteAccountModal = () => {
 
       if (error) {
         toast.error('Something went wrong.');
+        log.error(`deleteAccount: ${error.message}`);
         throw new Error(error.message);
       }
       
       toast.success('Account deleted successfully.');
+      log.info('deleteAccount: Account deleted successfully.');
       localStorage.removeItem('auth')
       localStorage.removeItem('username');
       window.location.href = '/';
