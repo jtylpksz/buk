@@ -145,19 +145,19 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
           <Card.Section withBorder inheritPadding py="xs">
             <Group justify="space-between">
               <Text fw={500}>{comment.author}</Text>
-              <Menu withinPortal position="bottom-end" shadow="sm">
-                <Menu.Target>
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    onClick={(event) => event.preventDefault()}
-                  >
-                    <IconDots style={{ width: rem(16), height: rem(16) }} />
-                  </ActionIcon>
-                </Menu.Target>
+              {comment.author === username && auth ? (
+                <Menu withinPortal position="bottom-end" shadow="sm">
+                  <Menu.Target>
+                    <ActionIcon
+                      variant="subtle"
+                      color="gray"
+                      onClick={(event) => event.preventDefault()}
+                    >
+                      <IconDots style={{ width: rem(16), height: rem(16) }} />
+                    </ActionIcon>
+                  </Menu.Target>
 
-                <Menu.Dropdown>
-                  {comment.author === username && auth ? (
+                  <Menu.Dropdown>
                     <Menu.Item
                       id={comment.id}
                       onClick={deleteComment}
@@ -170,9 +170,9 @@ const Comments = ({ data, id }: { data: CommentType[]; id: string }) => {
                     >
                       Delete
                     </Menu.Item>
-                  ) : null}
-                </Menu.Dropdown>
-              </Menu>
+                  </Menu.Dropdown>
+                </Menu>
+              ) : null}
             </Group>
           </Card.Section>
 
