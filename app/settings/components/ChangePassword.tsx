@@ -7,7 +7,6 @@ import { supabase } from '@/lib/supabaseClient';
 import { useRef } from 'react';
 import { USERS_TABLE } from '@/keys/keys';
 import { encrypt } from '@/lib/security/encrypt';
-import { decrypt } from '@/lib/security/decrypt';
 import { useLogger } from 'next-axiom';
 
 const ChangePasswordModal = () => {
