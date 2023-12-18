@@ -6,7 +6,7 @@ import { Toaster, toast } from 'sonner';
 import { useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { USERS_TABLE } from '@/keys/keys';
-import { decrypt } from '@/lib/security/decrypt';
+
 import { useLogger } from 'next-axiom';
 
 const DeleteAccountModal = () => {
@@ -27,7 +27,11 @@ const DeleteAccountModal = () => {
       .eq('username', username);
 
     const passwordOnDB = passwordUserOnDB[0].password;
-    const passwordDecrypted = decrypt(passwordOnDB);
+
+    const g: any = process.env.NEXT_PUBLIC_SECRET_KEY
+    const decrypted: any = CryptoJS.AES.decrypt(passwordOnDB, g);
+    const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+    const passwordDecrypted = JSON.parse(decryptedString);
 
     if (passwordDecrypted.message === password) {
       const { error } = await supabase
