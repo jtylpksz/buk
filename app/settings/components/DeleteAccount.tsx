@@ -28,8 +28,9 @@ const DeleteAccountModal = () => {
 
     const passwordOnDB = passwordUserOnDB[0].password;
 
-    const g: any = process.env.NEXT_PUBLIC_SECRET_KEY
-    const decrypted: any = CryptoJS.AES.decrypt(passwordOnDB, g);
+    // Not use the decrypt() function, it causes hydratation errors in production!
+    const key = process.env.NEXT_PUBLIC_SECRET_KEY ?? ''
+    const decrypted = CryptoJS.AES.decrypt(passwordOnDB, key);
     const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
     const passwordDecrypted = JSON.parse(decryptedString);
 

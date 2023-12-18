@@ -23,7 +23,6 @@ const ChangePasswordModal = () => {
     const username = localStorage.getItem('username');
     const currentPassword = currentPasswordRef.current.value;
     const newPassword = newPasswordRef.current.value;
-    console.table({ username, currentPassword, newPassword });
 
     const { data: passwordUserOnDB }: any = await supabase
       .from(USERS_TABLE)
@@ -32,7 +31,13 @@ const ChangePasswordModal = () => {
 
     const passwordOnDB = passwordUserOnDB[0].password;
 
-    if (decrypt(passwordOnDB).message === currentPassword) {
+    // Not use the decrypt() function, it causes hydratation errors in production!
+    const key = process.env.NEXT_PUBLIC_SECRET_KEY ?? ''
+    const decrypted = CryptoJS.AES.decrypt(passwordOnDB, key);
+    const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+    const passwordDecrypted = JSON.parse(decryptedString);
+
+    if (passwordDecrypted.message === currentPassword) {
       const { error } = await supabase
         .from(USERS_TABLE)
         .update({ password: encrypt(newPassword) })
