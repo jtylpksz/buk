@@ -30,6 +30,7 @@ const ChangePasswordModal = () => {
 
     const passwordOnDB = passwordUserOnDB[0].password;
 
+    /*
     // Not use the decrypt() function, it causes hydratation errors in production!
     const key = process.env.NEXT_PUBLIC_SECRET_KEY ?? ''
     const decrypted = CryptoJS.AES.decrypt(passwordOnDB, key);
@@ -53,6 +54,7 @@ const ChangePasswordModal = () => {
       return;
     }
     toast.error('Passwords do not match.');
+     */
   };
 
   return (
