@@ -6,7 +6,7 @@ import { Toaster, toast } from 'sonner';
 import { supabase } from '@/lib/supabaseClient';
 import { useRef } from 'react';
 import { USERS_TABLE } from '@/keys/keys';
-import { encrypt } from '@/lib/security/encrypt';
+import CryptoJS from 'crypto-js';
 import { useLogger } from 'next-axiom';
 
 const ChangePasswordModal = () => {

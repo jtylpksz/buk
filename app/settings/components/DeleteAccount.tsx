@@ -6,6 +6,7 @@ import { Toaster, toast } from 'sonner';
 import { useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { USERS_TABLE } from '@/keys/keys';
+import CryptoJS from 'crypto-js';
 
 import { useLogger } from 'next-axiom';
 
