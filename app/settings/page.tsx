@@ -30,7 +30,7 @@ const Settings = () => {
         <Text size="sm">
           If someone hacked your account, you can change your password here.
         </Text>
-        <ChangePasswordModal />
+        {/*<ChangePasswordModal />*/}
       </Box>
 
       <Box mt="sm">
