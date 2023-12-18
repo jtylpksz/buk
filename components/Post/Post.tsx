@@ -97,7 +97,7 @@ const Post = ({ data }: Post) => {
   };
 
   const copyPostLink = () => {
-    navigator.clipboard.writeText(`https://buk.vercel.app/post?id=${id}`);
+    navigator.clipboard.writeText(`https://buk-net.vercel.app/post?id=${id}`);
     close(); // close the modal
   };
 
@@ -188,8 +188,8 @@ const Post = ({ data }: Post) => {
       <Modal opened={opened} onClose={close} title="Share Post" centered>
         <Flex direction="column" gap={5}>
           <Text>The following url is:</Text>
-          <a href={`https://buk.vercel.app/post?id=${id}`}>
-            https://buk.vercel.app/post?id={id}
+          <a href={`https://buk-net.vercel.app/post?id=${id}`}>
+            https://buk-net.vercel.app/post?id={id}
           </a>
           <Button onClick={copyPostLink}>Copy URL and close</Button>
         </Flex>

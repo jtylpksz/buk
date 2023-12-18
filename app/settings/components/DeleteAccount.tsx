@@ -7,7 +7,7 @@ import { useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { USERS_TABLE } from '@/keys/keys';
 import { decrypt } from '@/lib/security/decrypt';
-import {useLogger} from 'next-axiom';
+import { useLogger } from 'next-axiom';
 
 const DeleteAccountModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -27,8 +27,9 @@ const DeleteAccountModal = () => {
       .eq('username', username);
 
     const passwordOnDB = passwordUserOnDB[0].password;
+    const passwordDecrypted = decrypt(passwordOnDB);
 
-    if (decrypt(passwordOnDB).message === password) {
+    if (passwordDecrypted.message === password) {
       const { error } = await supabase
         .from(USERS_TABLE)
         .delete()
@@ -39,10 +40,10 @@ const DeleteAccountModal = () => {
         log.error(`deleteAccount: ${error.message}`);
         throw new Error(error.message);
       }
-      
+
       toast.success('Account deleted successfully.');
       log.info('deleteAccount: Account deleted successfully.');
-      localStorage.removeItem('auth')
+      localStorage.removeItem('auth');
       localStorage.removeItem('username');
       window.location.href = '/';
       return;
@@ -65,12 +66,7 @@ const DeleteAccountModal = () => {
             type="password"
           />
 
-          <Button
-            type="submit"
-            mt="xl"
-            fullWidth
-            data-cy="deleteAccountButton"
-          >
+          <Button type="submit" mt="xl" fullWidth data-cy="deleteAccountButton">
             Delete Account
           </Button>
         </form>
