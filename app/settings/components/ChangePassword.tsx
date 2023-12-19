@@ -3,70 +3,42 @@
 import { useDisclosure } from '@mantine/hooks';
 import { Button, Modal, TextInput } from '@mantine/core';
 import { Toaster, toast } from 'sonner';
-import { supabase } from '@/lib/supabaseClient';
-import { useRef } from 'react';
-import { USERS_TABLE } from '@/keys/keys';
-import CryptoJS from 'crypto-js';
-import { useLogger } from 'next-axiom';
+import { useEffect, useState } from 'react';
+import { useFormState } from 'react-dom';
+
+import SubmitButton from '@/components/SubmitButton/SubmitButton';
+import { changePassword } from '@/actions/changePassword';
 
 const ChangePasswordModal = () => {
+  const [username, setUsername] = useState('');
   const [opened, { open, close }] = useDisclosure(false);
-  const log = useLogger();
 
-  const currentPasswordRef: any = useRef<HTMLInputElement>(null);
-  const newPasswordRef: any = useRef<HTMLInputElement>(null);
+  const [broadcast, formAction]: any = useFormState(changePassword, {
+    message: '',
+    success: false,
+    username: username,
+  });
 
-  const changePassword = async (event: React.FormEvent) => {
-    event.preventDefault();
+  useEffect(() => {
+    const username: any = localStorage.getItem('username');
+    setUsername(username);
 
-    const username = localStorage.getItem('username');
-    const currentPassword = currentPasswordRef.current.value;
-    const newPassword = newPasswordRef.current.value;
-
-    const { data: passwordUserOnDB }: any = await supabase
-      .from(USERS_TABLE)
-      .select('password')
-      .eq('username', username);
-
-    const passwordOnDB = passwordUserOnDB[0].password;
-
-
-    // Not use the decrypt() function, it causes hydratation errors in production!
-    const key = process.env.NEXT_PUBLIC_SECRET_KEY ?? ''
-    const decrypted = CryptoJS.AES.decrypt(passwordOnDB, key);
-    const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
-    const passwordDecrypted = JSON.parse(decryptedString);
-/*
-    if (passwordDecrypted.message === currentPassword) {
-      const { error } = await supabase
-        .from(USERS_TABLE)
-        .update({ password: encrypt(newPassword) })
-        .eq('username', username);
-
-      if (error) {
-        toast.error('Something went wrong.');
-        log.error(`changePassword: ${error.message}`);
-        throw new Error(error.message);
-      }
-
-      toast.success('Password changed successfully.');
-      log.info('Password changed successfully.');
-      return;
+    if (broadcast.success && broadcast.message) {
+      toast.success(broadcast.message);
+    } else if (!broadcast.success && broadcast.message) {
+      toast.error(broadcast.message);
     }
-    toast.error('Passwords do not match.');
-     */
-  };
+  }, [broadcast]);
 
   return (
     <>
       <Modal opened={opened} onClose={close} title="Change Password" centered>
-        <form onSubmit={changePassword}>
+        <form action={formAction}>
           <TextInput
             mt="md"
             label="Your current password"
             placeholder="Your current password"
             name="currentPassword"
-            ref={currentPasswordRef}
             data-cy="currentPasswordInput"
             type="password"
             required
@@ -75,21 +47,23 @@ const ChangePasswordModal = () => {
             mt="md"
             label="New Password"
             placeholder="Your new Password"
-            name="password"
-            ref={newPasswordRef}
+            name="newPassword"
             data-cy="newPasswordInput"
             type="password"
+            minLength={8}
+            maxLength={24}
             required
           />
 
-          <Button
-            type="submit"
+          <input type="hidden" name="username" value={username} />
+
+          <SubmitButton
+            valueInRequest="Changing Password..."
+            defaultValue="Change Password"
             mt="xl"
             fullWidth
-            data-cy="changePasswordButton"
-          >
-            Change Password
-          </Button>
+            dataCy="changePasswordButton"
+          />
         </form>
       </Modal>
 

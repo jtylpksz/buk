@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* 
-          ! Comment this line while you are using cypress, 
+          ! Comment these lines while you are using cypress, 
           ! it has hydration issues, even with the `suppressHydrationWarning` attribute 
         */}
         <ColorSchemeScript suppressHydrationWarning />

@@ -3,78 +3,59 @@
 import { Button, Modal, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Toaster, toast } from 'sonner';
-import { useRef } from 'react';
-import { supabase } from '@/lib/supabaseClient';
-import { USERS_TABLE } from '@/keys/keys';
-import CryptoJS from 'crypto-js';
+import { useEffect, useState } from 'react';
+import { useFormState } from 'react-dom';
 
-import { useLogger } from 'next-axiom';
+import SubmitButton from '@/components/SubmitButton/SubmitButton';
+import { deleteAccount } from '@/actions/deleteAccount';
 
 const DeleteAccountModal = () => {
+  const [username, setUsername] = useState('');
   const [opened, { open, close }] = useDisclosure(false);
-  const log = useLogger();
 
-  const passwordRef: any = useRef<HTMLInputElement>(null);
+  const [broadcast, formAction]: any = useFormState(deleteAccount, {
+    message: '',
+    success: false,
+    username: username,
+  });
 
-  const deleteAccount = async (event: React.FormEvent) => {
-    event.preventDefault();
+  useEffect(() => {
+    const username: any = localStorage.getItem('username');
+    setUsername(username);
 
-    const username = localStorage.getItem('username');
-    const password = passwordRef.current.value;
-
-    const { data: passwordUserOnDB }: any = await supabase
-      .from(USERS_TABLE)
-      .select('password')
-      .eq('username', username);
-
-    const passwordOnDB = passwordUserOnDB[0].password;
-
-    // Not use the decrypt() function, it causes hydratation errors in production!
-    const key = process.env.NEXT_PUBLIC_SECRET_KEY ?? ''
-    const decrypted = CryptoJS.AES.decrypt(passwordOnDB, key);
-    const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
-    const passwordDecrypted = JSON.parse(decryptedString);
-
-    if (passwordDecrypted.message === password) {
-      const { error } = await supabase
-        .from(USERS_TABLE)
-        .delete()
-        .eq('username', username);
-
-      if (error) {
-        toast.error('Something went wrong.');
-        log.error(`deleteAccount: ${error.message}`);
-        throw new Error(error.message);
-      }
-
-      toast.success('Account deleted successfully.');
-      log.info('deleteAccount: Account deleted successfully.');
-      localStorage.removeItem('auth');
+    if (broadcast.success && broadcast.message) {
+      toast.success(broadcast.message);
       localStorage.removeItem('username');
+      localStorage.removeItem('auth');
       window.location.href = '/';
-      return;
+    } else if (!broadcast.success && broadcast.message) {
+      toast.error(broadcast.message);
     }
-    toast.error('Passwords do not match.');
-  };
+  }, [broadcast]);
 
   return (
     <>
       <Modal opened={opened} onClose={close} title="Delete Account" centered>
-        <form onSubmit={deleteAccount}>
+        <form action={formAction}>
           <TextInput
             mt="md"
             label="Your password"
             placeholder="Write here your password"
-            name="currentPassword"
-            ref={passwordRef}
+            name="password"
             data-cy="passwordInput"
             required
             type="password"
           />
 
-          <Button type="submit" mt="xl" fullWidth data-cy="deleteAccountButton">
-            Delete Account
-          </Button>
+          <input type="hidden" name="username" value={username} />
+
+          <SubmitButton
+            valueInRequest="Deleting Account..."
+            defaultValue="Delete Account"
+            mt="xl"
+            fullWidth
+            dataCy="deleteAccountButton"
+          />
         </form>
       </Modal>
 
